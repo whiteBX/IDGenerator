@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.white.idgenerator.service.config.GenerateProperties;
 import org.white.idgenerator.service.entity.IdGenerateInfo;
+import org.white.idgenerator.service.generator.CasGenerator;
 import org.white.idgenerator.service.generator.IdGenerator;
 import org.white.idgenerator.service.generator.LockSequenceGenerator;
 import org.white.idgenerator.service.service.IdGenerateService;
@@ -22,6 +23,8 @@ public class IdGenerateServiceImpl implements IdGenerateService {
     private GenerateProperties generateProperties;
     @Autowired
     private LockSequenceGenerator lockSequenceGenerator;
+    @Autowired
+    private CasGenerator casGenerator;
 
     public String genBinaryId() {
         return Long.toBinaryString(genId());
@@ -39,7 +42,7 @@ public class IdGenerateServiceImpl implements IdGenerateService {
         IdGenerateInfo info = new IdGenerateInfo();
         info.setMachineId(generateProperties.getMachineId());
         info.setVersion(generateProperties.getVersion());
-        lockSequenceGenerator.generate(info, generateProperties);
+        casGenerator.generate(info, generateProperties);
         return IdGenerator.genearte(info, generateProperties);
     }
 }
